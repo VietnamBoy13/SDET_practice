@@ -53,4 +53,5 @@ class CustomersPage(BasePage):
                 self.click_element_in_row(row, self.button_delete)
                 break
         time.sleep(2)
+
         assert closest_name not in self.first_name_search(), f"Клиент {closest_name} не был удален"
