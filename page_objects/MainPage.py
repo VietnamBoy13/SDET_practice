@@ -1,10 +1,13 @@
+import allure
 from selenium.webdriver.common.by import By
 from page_objects.BasePage import BasePage
-import allure
 
 
 class MainPage(BasePage):
+    """Главная страница с кнопками управления клиентами."""
+
     def __init__(self, driver):
+        """Инициализирует локаторы и вызывает конструктор родителя."""
         super().__init__(driver, timeout=60)
         self.button_add_customer = (
             By.XPATH,
@@ -15,12 +18,12 @@ class MainPage(BasePage):
             "//button[contains(text(), 'Customers')]"
         )
 
-    @allure.step('Найти кнопку (Add Customer) и нажать на нее')
+    @allure.step('Найти кнопку "Add Customer" и нажать на нее')
     def click_button_add_customer(self) -> None:
+        """Нажимает кнопку 'Add Customer'."""
         self.click_element(self.button_add_customer)
 
-    @allure.step('Найти кнопку (Customers) и нажать на нее ')
+    @allure.step('Найти кнопку "Customers" и нажать на нее')
     def click_button_customers(self) -> None:
+        """Нажимает кнопку 'Customers'."""
         self.click_element(self.button_customers)
-
-
