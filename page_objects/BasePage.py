@@ -35,6 +35,16 @@ class BasePage:
         return self.wait.until(expected_conditions.visibility_of_all_elements_located((by, value)),
                                message=f'Элементы {by, value} не найдены')
 
+    def find_locator(self, locator: tuple):
+        """
+        Находит один элемент на странице
+        :param locator: Кортеж, определяющий локатор
+        """
+        return self.find_element(*locator)
+
+    def find_locators(self, locator: tuple):
+        return self.find_elements(*locator)
+
     def is_element_visible(self, locator: tuple) -> bool:
         """
         Проверяет, виден ли элемент на странице.
@@ -54,6 +64,17 @@ class BasePage:
         """
         self.find_element(*locator).click()
 
+    def click_element_in_row(self, row: WebElement, locator: tuple) -> None:
+        """
+        Кликает по элементу внутри строки таблицы.
+        :param row: Строка таблицы (WebElement)
+        :param locator: Кортеж, определяющий локатор для поиска элемента внутри строки
+        """
+        # Ищем элемент внутри строки с использованием переданного локатора
+        element = row.find_element(*locator)
+        # Кликаем по найденному элементу
+        element.click()
+
     def get_text(self, locator: tuple) -> str:
         """
         Получает текст элемента
@@ -61,6 +82,23 @@ class BasePage:
         :return: Текст элемента
         """
         return self.find_element(*locator).text
+
+    def get_row_text(self, row: WebElement, locator: tuple) -> str:
+        """
+        Получает текст элемента внутри строки таблицы.
+        :param row: Строка таблицы (WebElement)
+        :param locator: Кортеж, определяющий локатор для поиска элемента внутри строки
+        :return: Текст элемента
+        """
+        try:
+            # Проверяем, что locator - это кортеж, а не строка
+            if isinstance(locator, tuple):
+                return row.find_element(*locator).text
+            else:
+                raise ValueError(f"Locator должен быть кортежем, а не строкой. Получено: {locator}")
+        except NoSuchElementException:
+            print(f"Элемент по локатору {locator} не найден внутри строки.")
+            return ''
 
     def fill_field(self, locator: tuple, info: str) -> None:
         """
@@ -86,4 +124,3 @@ class BasePage:
         element = self.wait.until(EC.presence_of_element_located(locator))
         element.clear()
         element.send_keys(text)
-

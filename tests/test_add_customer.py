@@ -3,6 +3,8 @@ from conftest import driver
 from page_objects.CustomersPage import CustomersPage
 from page_objects.MainPage import MainPage
 from page_objects.AddCustomerPage import AddCustomerPage
+from helpers.DataHelpers import generate_post_code
+from helpers.StringHelpers import convert_to_name
 
 
 @allure.title('Проверка создания нового клиента')
@@ -15,10 +17,14 @@ from page_objects.AddCustomerPage import AddCustomerPage
 5. Нажать кнопку "Add Customer".
 ''')
 def test_add_customer(driver):
+    """Тест на добавление нового клиента."""
     main_page = MainPage(driver)
     main_page.click_button_add_customer()
     add_customer_page = AddCustomerPage(driver)
-    add_customer_page.add_customer()
+    post_code = generate_post_code()
+    first_name = convert_to_name(post_code)
+    last_name = "Doe"
+    add_customer_page.add_customer(first_name, last_name, post_code)
     add_customer_page.click_button_add_customer()
 
 @allure.title('Проверка наличия добавленного клиента в списке')
